@@ -1,0 +1,40 @@
+buildscript {
+    repositories { jcenter() }
+}
+
+plugins {
+    id "io.spring.dependency-management" version "1.0.0.RELEASE"
+    id "org.sonarqube" version "2.2.1"
+}
+
+ext { springBootVersion = '1.5.2.RELEASE' }
+
+apply plugin: 'java'
+apply plugin: "checkstyle"
+apply plugin: "pmd"
+apply plugin: "jacoco"
+
+jar {
+    baseName = 'library'
+    version = '0.1'
+}
+sourceCompatibility = 1.8
+
+repositories { jcenter() }
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+dependencyManagement {
+    imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
+}
+
+pmd {
+    ruleSetFiles = files("config/pmd/pmd-ruleset.xml", "config/pmd/pmd-ruleset-feature-index-manager.xml")
+}
+
+checkstyle {
+    toolVersion = "7.2"
+}

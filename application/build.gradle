@@ -1,0 +1,68 @@
+buildscript {
+    repositories { jcenter() }
+}
+
+plugins {
+    id "org.sonarqube" version "2.2.1"
+    id 'org.springframework.boot' version "1.5.2.RELEASE"
+}
+
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: "checkstyle"
+apply plugin: "pmd"
+apply plugin: "jacoco"
+
+jar {
+    baseName = 'application'
+    version = '0.1'
+}
+sourceCompatibility = 1.8
+
+repositories { jcenter() }
+
+dependencies {
+    // Spring Boot
+    configurations {
+        all*.exclude module : 'spring-boot-starter-logging'
+    }
+    compile('org.springframework.boot:spring-boot-starter-actuator')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-tomcat')
+
+    // Logging
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.24'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.8'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.8'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.8'
+
+
+    // Core library
+    compile project(':library')
+
+    // Apache Commons
+    compile group: "commons-io", name: "commons-io", version: "2.4"
+    compile group: "org.apache.commons", name: "commons-lang3", version: "3.0"
+    compile group: "org.apache.commons", name: "commons-collections4", version: "4.0"
+    compile group: "commons-validator", name: "commons-validator", version: "1.5.0"
+    compile group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
+
+    // Flyway database migration to update embedded database when application starts
+    compile group: 'org.flywaydb', name: 'flyway-core', version: '4.1.2'
+
+    // Swagger
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.6.1'
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.6.1'
+
+    //Tests
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile("junit:junit")
+}
+
+pmd {
+    ruleSetFiles = files("config/pmd/pmd-ruleset.xml", "config/pmd/pmd-ruleset-feature-index-manager.xml")
+}
+
+checkstyle {
+    toolVersion = "7.2"
+}
