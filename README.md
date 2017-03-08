@@ -22,4 +22,5 @@ Build process:
  ```
  
 Welcome page is available at **http://localhost:8080/app**
+
 Swagger documentation is available at **http://localhost:8080/app/restapi/swagger-ui.html#/**
